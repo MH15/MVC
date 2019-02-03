@@ -1,4 +1,7 @@
 {
     "better-comments.highlightPlainText": true,
-    "rewrap.wrappingColumn": 70
+    "rewrap.wrappingColumn": 70,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "diffEditor.renderSideBySide": false
 }

@@ -11,7 +11,7 @@ class View extends DOM {
      * Create the html DOM here.
      */
     constructor() {
-        super("name")
+        super(document.body, "RPN Calculator Demo")
         
         this.tTop = new DTextArea("0", TEXT_AREA_HEIGHT, TEXT_AREA_WIDTH)
         this.tBottom = new DTextArea("0", TEXT_AREA_HEIGHT, TEXT_AREA_WIDTH)
@@ -105,14 +105,8 @@ class View extends DOM {
         sideButtonPanel.add(this.bHelp)
         
         this.clone = this.bHelp.clone()
+        this.clone.content = "new"
         sideButtonPanel.add(this.clone)
-
-
-
-        // this.newTextarea = this.tTop.clone()
-        
-
-        // mainButtonPanel.add(this.clone)
 
 
         // Events can be added after elements are appended to the DOM
@@ -185,12 +179,5 @@ class View extends DOM {
     }
 
 
-    
-
-
-
-    /**
-     * TODO: Event listeners, hooks into Model and View
-     */
 
 }

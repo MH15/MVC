@@ -3,12 +3,27 @@
  */
 class DOM {
     /**
-     * @param {String} name the name your DOM model    
+     * @param {Node} name the name your DOM model    
      */
-    constructor(name) {
-        this.name = name
+    constructor(node, name) {
+        this.title = name
         console.log(`Instantiating a new DOM named '${name}'`)
-        
+
+        if (node) {
+            this.obj = node
+        } else {
+            this.obj = document.body
+        }
+
+    }
+    /**
+     * Manage the document title
+     */
+    get title() {
+        return document.title
+    }
+    set title(text) {
+        document.title = text
     }
 
     /**
@@ -16,17 +31,27 @@ class DOM {
      * @param {DOMElement} element 
      */
     add(element) {
-        document.body.appendChild(element.obj)
+        this.obj.appendChild(element.obj)
+    }
+
+    /**
+     * Clear the DOM. This and add() are the seeds for the
+     * routing parts of this library
+     */
+    clear() {
+        helpers.clear(this.obj)
     }
 
 
 }
 
-let VALID_DOM_ELEMENTS = ["a","abbr","acronym","address","applet","area","article","aside","audio","b","base","basefont","bdi","bdo","bgsound","big","blink","blockquote","body","br","button","canvas","caption","center","cite","code","col","colgroup","command","content","data","datalist","dd","del","details","dfn","dialog","dir","div","dl","dt","element","em","embed","fieldset","figcaption","figure","font","footer","form","frame","frameset","h1","head","header","hgroup","hr","html","i","iframe","image","img","input","ins","isindex","kbd","keygen","label","legend","li","link","listing","main","map","mark","marquee","menu","menuitem","meta","meter","multicol","nav","nextid","nobr","noembed","noframes","noscript","object","ol","optgroup","option","output","p","param","picture","plaintext","pre","progress","q","rb","rp","rt","rtc","ruby","s","samp","script","section","select","shadow","slot","small","source","spacer","span","strike","strong","style","sub","summary","sup","table","tbody","td","template","textarea","tfoot","th","thead","time","title","tr","track","tt","u","ul","var","video","wbr","xmp"]
-let VALID_DOM_EVENTS = ["abort","abort","abort","afterprint","animationend","animationiteration","animationstart","appinstalled","audioprocess","audioend ","audiostart ","beforeprint","beforeunload","beginEvent","blocked","blur","boundary ","cached","canplay","canplaythrough","change","chargingchange","chargingtimechange","checking","click","close","complete","complete","The definition of '","compositionend","compositionstart","compositionupdate","contextmenu","copy","cut","dblclick","devicechange","devicelight","devicemotion","deviceorientation","deviceproximity","dischargingtimechange","DOMActivate ","DOMAttributeNameChanged ","DOMAttrModified ","DOMCharacterDataModified ","DOMContentLoaded","DOMElementNameChanged ","DOMFocusIn ","DOMFocusOut ","DOMNodeInserted ","DOMNodeInsertedIntoDocument","DOMNodeRemoved ","DOMNodeRemovedFromDocument ","DOMSubtreeModified ","downloading","drag","dragend","dragenter","dragleave","dragover","dragstart","drop","durationchange","emptied","end ","end ","ended","ended","endEvent","error","error","error","error","error","error","error ","error","focus","focusin","focusout","fullscreenchange","fullscreenerror","gamepadconnected","gamepaddisconnected","gotpointercapture","hashchange","lostpointercapture","input","invalid","keydown","keypress","keyup","languagechange ","levelchange","load","load","loadeddata","loadedmetadata","loadend","loadstart","mark ","message","message","message","message","messageerror","message ServiceWorker","mousedown","mouseenter","mouseleave","mousemove","mouseout","mouseover","mouseup","nomatch ","notificationclick","noupdate","obsolete","offline","online","open","open","orientationchange","pagehide","pageshow","paste","pause","pause ","pointercancel","pointerdown","pointerenter","pointerleave","pointerlockchange","pointerlockerror","pointermove","pointerout","pointerover","pointerup","play","playing","popstate","progress","progress","push","pushsubscriptionchange","ratechange","readystatechange","repeatEvent","reset","resize","result ","resume ","scroll","seeked","seeking","select","selectstart ","selectionchange ","show","slotchange","soundend ","soundstart ","speechend ","speechstart ","stalled","start ","start","storage","submit","success","suspend","SVGAbort","SVGError","SVGLoad","SVGResize","SVGScroll","SVGUnload","SVGZoom","timeout","timeupdate","touchcancel","touchend","touchmove","touchstart","transitionend","unload","updateready","upgradeneeded ","userproximity","voiceschanged ","versionchange ","visibilitychange","volumechange","waiting","wheel"]
+let VALID_DOM_ELEMENTS = ["a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio", "b", "base", "basefont", "bdi", "bdo", "bgsound", "big", "blink", "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code", "col", "colgroup", "command", "content", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "dir", "div", "dl", "dt", "element", "em", "embed", "fieldset", "figcaption", "figure", "font", "footer", "form", "frame", "frameset", "h1", "head", "header", "hgroup", "hr", "html", "i", "iframe", "image", "img", "input", "ins", "isindex", "kbd", "keygen", "label", "legend", "li", "link", "listing", "main", "map", "mark", "marquee", "menu", "menuitem", "meta", "meter", "multicol", "nav", "nextid", "nobr", "noembed", "noframes", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "plaintext", "pre", "progress", "q", "rb", "rp", "rt", "rtc", "ruby", "s", "samp", "script", "section", "select", "shadow", "slot", "small", "source", "spacer", "span", "strike", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "tt", "u", "ul", "var", "video", "wbr", "xmp"]
+let VALID_DOM_EVENTS = ["abort", "abort", "abort", "afterprint", "animationend", "animationiteration", "animationstart", "appinstalled", "audioprocess", "audioend ", "audiostart ", "beforeprint", "beforeunload", "beginEvent", "blocked", "blur", "boundary ", "cached", "canplay", "canplaythrough", "change", "chargingchange", "chargingtimechange", "checking", "click", "close", "complete", "complete", "The definition of '", "compositionend", "compositionstart", "compositionupdate", "contextmenu", "copy", "cut", "dblclick", "devicechange", "devicelight", "devicemotion", "deviceorientation", "deviceproximity", "dischargingtimechange", "DOMActivate ", "DOMAttributeNameChanged ", "DOMAttrModified ", "DOMCharacterDataModified ", "DOMContentLoaded", "DOMElementNameChanged ", "DOMFocusIn ", "DOMFocusOut ", "DOMNodeInserted ", "DOMNodeInsertedIntoDocument", "DOMNodeRemoved ", "DOMNodeRemovedFromDocument ", "DOMSubtreeModified ", "downloading", "drag", "dragend", "dragenter", "dragleave", "dragover", "dragstart", "drop", "durationchange", "emptied", "end ", "end ", "ended", "ended", "endEvent", "error", "error", "error", "error", "error", "error", "error ", "error", "focus", "focusin", "focusout", "fullscreenchange", "fullscreenerror", "gamepadconnected", "gamepaddisconnected", "gotpointercapture", "hashchange", "lostpointercapture", "input", "invalid", "keydown", "keypress", "keyup", "languagechange ", "levelchange", "load", "load", "loadeddata", "loadedmetadata", "loadend", "loadstart", "mark ", "message", "message", "message", "message", "messageerror", "message ServiceWorker", "mousedown", "mouseenter", "mouseleave", "mousemove", "mouseout", "mouseover", "mouseup", "nomatch ", "notificationclick", "noupdate", "obsolete", "offline", "online", "open", "open", "orientationchange", "pagehide", "pageshow", "paste", "pause", "pause ", "pointercancel", "pointerdown", "pointerenter", "pointerleave", "pointerlockchange", "pointerlockerror", "pointermove", "pointerout", "pointerover", "pointerup", "play", "playing", "popstate", "progress", "progress", "push", "pushsubscriptionchange", "ratechange", "readystatechange", "repeatEvent", "reset", "resize", "result ", "resume ", "scroll", "seeked", "seeking", "select", "selectstart ", "selectionchange ", "show", "slotchange", "soundend ", "soundstart ", "speechend ", "speechstart ", "stalled", "start ", "start", "storage", "submit", "success", "suspend", "SVGAbort", "SVGError", "SVGLoad", "SVGResize", "SVGScroll", "SVGUnload", "SVGZoom", "timeout", "timeupdate", "touchcancel", "touchend", "touchmove", "touchstart", "transitionend", "unload", "updateready", "upgradeneeded ", "userproximity", "voiceschanged ", "versionchange ", "visibilitychange", "volumechange", "waiting", "wheel"]
 
 /**
- * Base class... make this fast as FUCK
+ * Base class... make this fast as FUCK. A DOMElement may
+ * exist in multiple locations in the browser DOM, this is
+ * by design.
  */
 class DOMElement {
     constructor(type) {
@@ -47,6 +72,7 @@ class DOMElement {
             this.obj.classList.add(c)
         })
     }
+
 
 
     /**
@@ -87,19 +113,19 @@ class DOMElement {
     add(element) {
         this.obj.appendChild(element.obj)
     }
-    /**
-     * Removes this DOMElement from all places in the DOM
-     */
+
+    // Removes this DOMElement from all places in the DOM
     remove() {
         this.obj.remove()
     }
+    // Removes all children from the DOMElement
+    clear() {
+        helpers.clear(this.obj)
+    }
 
-    duplicate() {
-        // let newDOM = this.obj.cloneNode(true)
-        // let newThis = this
-        // newThis.obj = newDOM
-
-    
+    // Creates a new DOMElement
+    clone() {
+        return new this.constructor()
     }
 }
 
@@ -110,15 +136,14 @@ class DTextArea extends DOMElement {
     /**
      * Creates a textarea based on the parameters supplied
      * @param {String} content 
-     * @param {Number} height 
-     * @param {Number} width 
+     * @param {Number} height optional
+     * @param {Number} width optional
      */
-    constructor(content, height, width) {
+    constructor(content, height = 5, width = 20) {
         super("textarea")
         this.obj.rows = height
         this.obj.cols = width
         this.obj.value = content
-        // console.log(this.obj)
     }
     /**
      * Set the editing avalability of the textarea
@@ -136,6 +161,12 @@ class DTextArea extends DOMElement {
         this.obj.value = text
     }
 
+    /**
+     * Creates a copy of the caller DTextArea
+     */
+    clone() {
+        return new this.constructor(this.content, this.obj.rows, this.obj.value)
+    }
 }
 
 /**
@@ -157,13 +188,12 @@ class DButton extends DOMElement {
     setEnabled(toggle) {
         this.obj.disabled = !toggle;
     }
-
+    /**
+     * Creates a copy of the caller DButton
+     */
     clone() {
-        let copy = new this.constructor("asac")
-        // switch this.constructor.name
-        return copy
+        return new this.constructor(this.content)
     }
-
 }
 /**
  * Here's where it gets interesting - the Layout class
