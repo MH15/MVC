@@ -2,14 +2,14 @@ class Controller {
     constructor(model, view) {
         this.model = model
         this.view = view
-        updateViewToMatch(model, view)
+        this.updateViewToMatch(model, view)
     }
 
+    updateViewToMatch(model, view) {
 
+        this.view.updateTopDisplay(model.top)
+        this.view.updateBottomDisplay(model.bottom)
+    }
 
 }
 
-function updateViewToMatch(model, view) {
-    let top = model.top
-    let bottom = model.bottom
-}

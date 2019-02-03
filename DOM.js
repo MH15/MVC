@@ -56,6 +56,13 @@ class DOMElement {
     addStyle(style) {
         this.obj.style.cssText += style
     }
+    /**
+     * Basically like calling innerHTML
+     * @param {String} text 
+     */
+    setContent(text) {
+        this.obj.innerHTML = text
+    }
 }
 
 /**
@@ -81,6 +88,14 @@ class DTextArea extends DOMElement {
      */
     setEditable(toggle) {
         this.obj.disabled = !toggle;
+    }
+
+    /**
+     * Set the content of said textarea
+     * @param {String} text 
+     */
+    setValue(text) {
+        this.obj.value = text
     }
 }
 

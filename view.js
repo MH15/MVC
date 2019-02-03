@@ -101,6 +101,42 @@ class View extends DOM {
         this.add(all)
 
     }
+    /**
+     * Attach the Controller to the View
+     * @param {Controller} controller 
+     */
+    registerObserver(controller) {
+        this.controller = controller;
+    }
+
+
+    /**
+     * Updates input display based on String provided as argument.
+     * @param input new value of input display
+     */
+    updateTopDisplay(n) {
+        this.tTop.setValue(n);
+    }
+
+    updateSubtractAllowed(allowed) {
+        this.bSubtract.setEnabled(allowed);
+    }
+    updateDivideAllowed(allowed) {
+        this.bDivide.setEnabled(allowed);
+    }
+    updatePowerAllowed(allowed) {
+        this.bPower.setEnabled(allowed);
+    }
+    updateRootAllowed(allowed) {
+        this.bRoot.setEnabled(allowed);
+    }
+
+
+    // Events
+    
+    
+
+
 
     /**
      * TODO: Event listeners, hooks into Model and View
