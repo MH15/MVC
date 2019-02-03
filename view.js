@@ -22,14 +22,15 @@ class View extends DOM {
         this.bSubtract = new DButton("-");
         this.bMultiply = new DButton("*");
         this.bDivide = new DButton("/");
-        this.bRoot = new DButton("√");
-        this.bSwap = new DButton("⇅");
+        this.bRoot = new DButton("root");
+        this.bSwap = new DButton("swap");
         this.bPower = new DButton("^");
-        this.bEnter = new DButton("↵");
+        this.bEnter = new DButton("enter");
         this.bClear = new DButton("clear");
 
-        this.bDivide.setEnabled(false);
-        this.bRoot.setEnabled(false);
+
+        // this.bDivide.setEnabled(false);
+        // this.bRoot.setEnabled(false);
 
         this.bDigits = []
         for (let i = 0; i < DIGIT_BUTTONS; i++) {
@@ -40,7 +41,7 @@ class View extends DOM {
         this.bSwap.addClass("swap", "disabled")
 
         let mainButtonPanel = new GridLayout(MAIN_BUTTON_PANEL_GRID_ROWS, MAIN_BUTTON_PANEL_GRID_COLUMNS)
-        console.log(mainButtonPanel)
+
 
         /*
          * Add the buttons to the main button panel, from left to
@@ -63,7 +64,6 @@ class View extends DOM {
         mainButtonPanel.add(this.bRoot);
         mainButtonPanel.add(this.bDivide);
 
-        console.log(mainButtonPanel.obj)
 
         /*
          * Create side button panel
@@ -100,6 +100,56 @@ class View extends DOM {
         all.add(combinedButtonPanels);
         this.add(all)
 
+        // help button
+        this.bHelp = new DButton("help")
+        sideButtonPanel.add(this.bHelp)
+        
+        this.clone = this.bHelp.clone()
+        sideButtonPanel.add(this.clone)
+
+
+
+        // this.newTextarea = this.tTop.clone()
+        
+
+        // mainButtonPanel.add(this.clone)
+
+
+        // Events can be added after elements are appended to the DOM
+        this.bClear.registerEvent('click', () => {
+            this.controller.processClearEvent()
+        })
+        this.bSwap.registerEvent('click', () => {
+            this.controller.processSwapEvent()
+        })
+        this.bEnter.registerEvent('click', () => {
+            this.controller.processEnterEvent()
+        })
+        this.bAdd.registerEvent('click', () => {
+            this.controller.processAddEvent()
+        })
+        this.bSubtract.registerEvent('click', () => {
+            this.controller.processSubtractEvent()
+        })
+        this.bMultiply.registerEvent('click', () => {
+            this.controller.processMultiplyEvent()
+        })
+        this.bDivide.registerEvent('click', () => {
+            this.controller.processDivideEvent()
+        })
+        this.bPower.registerEvent('click', () => {
+            this.controller.processPowerEvent()
+        })
+        this.bRoot.registerEvent('click', () => {
+            this.controller.processRootEvent()
+        })
+
+        for(let i = 0; i < DIGIT_BUTTONS; i++) {
+            this.bDigits[i].registerEvent('click', () => {
+                this.controller.processAddNewDigitEvent(i)
+            })
+        }
+
     }
     /**
      * Attach the Controller to the View
@@ -117,6 +167,9 @@ class View extends DOM {
     updateTopDisplay(n) {
         this.tTop.setValue(n);
     }
+    updateBottomDisplay(n) {
+        this.tBottom.setValue(n);
+    }
 
     updateSubtractAllowed(allowed) {
         this.bSubtract.setEnabled(allowed);
@@ -132,8 +185,6 @@ class View extends DOM {
     }
 
 
-    // Events
-    
     
 
 
