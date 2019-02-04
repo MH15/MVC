@@ -37,7 +37,7 @@ See [this](https://news.ycombinator.com/item?id=18792373) and [this](https://ove
         - TextArea(placeholder, content)
       - Link(content, href)
     - Layout
-      - GridLayout(rows, cols, ...node) - 
+      - GridLayout(rows, cols, ...node)
       - HorizontalLayout(...nodes)
       - VerticalLayout(...nodes)
   - HTMLElement

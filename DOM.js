@@ -54,6 +54,10 @@ class Element {
         })
     }
 
+    flex(value = 1) {
+        this.addStyle(`flex: ${value}`)
+    }
+
     /**
      * Add CSS to the 'style' attribute of the DOMElement
      * TODO: validate user-provided CSS
@@ -79,9 +83,7 @@ class DOMElement extends Element {
 }
 
 class Control extends DOMElement {
-    constructor(tag) {
-        super(tag)
-    }
+    constructor(tag) { super(tag) }
 
     set enabled(mode) { this.node.disabled = !mode }
     get enabled() { return !this.node.disabled }
@@ -99,9 +101,8 @@ class Button extends Control {
 }
 
 class Input extends Control {
-    constructor(tag) {
-        super(tag)
-    }
+    constructor(tag) { super(tag) }
+
     set value(text) { this.node.value = text }
     get value() { return this.node.value }
 
@@ -164,6 +165,14 @@ class Layout extends DOMElement {
             this.node.appendChild(node.node)
         })
     }
+
+    set maximized(mode) {
+        if (mode) {
+            this.addStyle(`height: 100%;`)
+        } else {
+            this.addStyle(`height: auto;`)
+        }
+    }
 }
 
 class GridLayout extends Layout {
@@ -181,6 +190,7 @@ class HorizontalLayout extends Layout {
         super(nodes)
         this.addStyle(`display: flex; width: 100%`)
     }
+
 }
 
 class VerticalLayout extends Layout {
@@ -189,4 +199,6 @@ class VerticalLayout extends Layout {
         this.addStyle(`display: flex; width: 100%`)
         this.addStyle(`flex-direction: column;`)
     }
+
+
 }

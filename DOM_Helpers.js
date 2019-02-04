@@ -18,14 +18,14 @@ class DOM_Helpers {
      * If a Node is provided, use that node, else return document.body
      * @param {Node} node 
      */
-    selectParentNode(node) {
+    static selectParentNode(node) {
         if (node) {
             return node
         }
         return document.body
     }
 
-    autoGen(number) {
+    static autoGen(number) {
         return "auto ".repeat(number)
     }
 }
