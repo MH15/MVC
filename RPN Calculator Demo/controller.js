@@ -6,8 +6,8 @@ class Controller {
     }
 
     updateViewToMatch() {
-        // this.view.updateTopDisplay(this.model.top)
-        // this.view.updateBottomDisplay(this.model.bottom)
+        this.view.updateTopDisplay(this.model.top)
+        this.view.updateBottomDisplay(this.model.bottom)
     }
 
     processClearEvent() {
@@ -61,7 +61,7 @@ class Controller {
     }
 
     processRootEvent() {
-        this.model.bottom = Math.pow(this.model.top, 1 / this.model.bottom)
+        this.model.bottom = Math.pow(this.model.top, 1/this.model.bottom)
         this.model.top = 0
         this.updateViewToMatch()
     }
