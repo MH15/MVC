@@ -1,26 +1,28 @@
 <html>
-    <head>
-        <title>MVC demo</title>
+
+<head>
+    <title>MVC demo</title>
 
 
-    </head>
+</head>
 
-    <body>
+<body>
 
 
-        <script type="text/javascript" src="DOM_Helpers.js"></script>
-        <script type="text/javascript" src="DOM.js"></script>
-        <script type="text/javascript" src="model.js"></script>
-        <script type="text/javascript" src="view.js"></script>
-        <script type="text/javascript" src="controller.js"></script>
+    <script type="text/javascript" src="DOM_Helpers.js"></script>
+    <script type="text/javascript" src="DOM.js"></script>
+    <script type="text/javascript" src="model.js"></script>
+    <script type="text/javascript" src="view.js"></script>
+    <script type="text/javascript" src="controller.js"></script>
 
-        <script type="text/javascript">
-            let helpers = new DOM_Helpers()
-            let model = new Model();
-            let view = new View();
-            let controller = new Controller(model, view);
+    <script type="text/javascript">
+        let helpers = new DOM_Helpers()
+        let model = new EventStore();
+        let view = new ToDoApp();
+        let controller = new Controller(model, view);
 
-            view.registerObserver(controller);
-        </script>
-    </body>
+        view.registerObserver(controller);
+    </script>
+</body>
+
 </html>

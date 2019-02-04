@@ -24,8 +24,4 @@ class DOM_Helpers {
         }
         return document.body
     }
-
-    autoGen(number) {
-        return "auto ".repeat(number)
-    }
 }

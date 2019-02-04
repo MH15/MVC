@@ -1,60 +1,47 @@
-/**
- * Methods for manipulating the overall DOM structure
- */
-class DOM {
-    /**
-     * @param {Node} name the name your DOM model    
-     */
-    constructor(node, name) {
-        this.title = name
-        console.log(`Instantiating a new DOM named '${name}'`)
-        this.obj = helpers.selectParentNode(node)
-    }
-    /**
-     * Manage the document title
-     */
-    get title() {
-        return document.title
-    }
-    set title(text) {
-        document.title = text
-    }
 
+class Rotor {
     /**
-     * Append a DOMElement directly to the browsers DOM
-     * @param {DOMElement} elements 
+     * Create the root of your app
+     * @param {Node} rootNode 
+     * @param {String} name 
      */
-    add(...elements) {
-        elements.forEach(el => {
-            this.obj.appendChild(el.obj)
+    constructor(rootNode, name) {
+        this.title = name
+        this.node = rootNode
+    }
+    /**
+     * Attach the Controller to the View
+     * @param {Controller} controller 
+     */
+    registerObserver(controller) {
+        this.controller = controller;
+    }
+    // Manage the Document Title
+    get title() { return document.title }
+    set title(text) { document.title = text }
+
+    add(...nodes) {
+        nodes.forEach(node => {
+            this.node.appendChild(node.node)
         })
     }
-
-    /**
-     * Clear the DOM. This and add() are the seeds for the
-     * routing parts of this library
-     */
-    clear() {
-        helpers.clear(this.obj)
-    }
-
 
 }
 
 
-/**
- * Base class... make this fast as FUCK. A DOMElement may
- * exist in multiple locations in the browser DOM, this is
- * by design.
- */
-class DOMElement {
-    constructor(type) {
-        if (helpers.VALID_DOM_ELEMENTS.includes(type)) {
-            this.obj = document.createElement(type)
-        } else {
-            throw "Try a valid HTML tag next time."
-        }
+class Element {
+    /**
+     * Encapsulate the given Node in an Element
+     * @param {Node} node 
+     */
+    constructor(node) {
+        this.node = node
     }
+
+
+    set content(text) { this.node.innerHTML = text }
+    get content() { return this.node.innerHTML }
+
     /**
      * Add classes to a given DOM element
      * @param {String} classNames because of Javascript's
@@ -63,7 +50,7 @@ class DOMElement {
      */
     addClass(...classNames) {
         classNames.forEach(c => {
-            this.obj.classList.add(c)
+            this.node.classList.add(c)
         })
     }
 
@@ -73,176 +60,133 @@ class DOMElement {
      * @param {String} style valid CSS Styles please
      */
     addStyle(style) {
-        this.obj.style.cssText += style
+        this.node.style.cssText += style
     }
+}
+
+class DOMElement extends Element {
     /**
-     * Basically like calling innerHTML
-     * @param {String} text 
+     * Create a new DOMElement of type `tag`
+     * @param {String} tag a valid HTML tag
      */
-    set content(text) {
-        this.obj.innerHTML = text
-    }
-    get content() {
-        return this.obj.innerHTML
-    }
-    /**
-     * This is literally just a wrapper for addEventListener
-     * @param {String} type 
-     * @param {Function} callback 
-     */
-    registerEvent(type, callback, options) {
-        if (helpers.VALID_DOM_EVENTS.includes(type)) {
-            this.obj.addEventListener(type, callback, options)
+    constructor(tag) {
+        if (helpers.VALID_DOM_ELEMENTS.includes(tag)) {
+            super(document.createElement(tag))
         } else {
-            throw "That's an invalid event type."
+            throw "Try a valid HTML tag next time."
+        }
+    }
+}
+
+class Control extends DOMElement {
+    constructor(tag) {
+        super(tag)
+    }
+
+    set enabled(mode) { this.node.disabled = !mode }
+    get enabled() { return !this.node.disabled }
+
+    focus(preventScroll) { this.node.focus(preventScroll) }
+    blur() { this.node.blur() }
+}
+
+class Button extends Control {
+    constructor(text) {
+        super('button')
+        this.content = text
+        this.focus()
+    }
+}
+
+class Input extends Control {
+    constructor(tag) {
+        super(tag)
+    }
+    set value(text) { this.node.value = text }
+    get value() { return this.node.value }
+
+    set placeholder(text) { this.node.placeholder = text }
+    get placeholder() { return this.node.placeholder }
+}
+
+class Text extends Input {
+    constructor(placeholder, type = 'text') {
+        super('input')
+        this.node.type = type
+        this.placeholder = placeholder
+    }
+}
+
+class TextArea extends Input {
+    constructor(placeholder, content = '') {
+        super('textarea')
+        this.placeholder = placeholder
+        this.value = content
+    }
+}
+
+
+class Anchor extends Control {
+    constructor(content = "DefaultAnchorText", href = "/") {
+        super('a')
+        this.content = content
+        this.href = href
+    }
+
+    set href(href) { this.node.href = href }
+    get href() { return this.node.href }
+}
+
+class Layout extends DOMElement {
+    constructor(nodes) {
+        super('div')
+        if (nodes) {
+            this.addFirst(nodes)
         }
     }
 
     /**
-     * Append a DOMElement directly to this DOMElement
-     * @param {DOMElement} elements 
+     * Add nodes to the parent Layout during creation
+     * @param  {Node[]} nodes 
      */
-    add(...elements) {
-        elements.forEach(el => {
-            this.obj.appendChild(el.obj)
+    addFirst(nodes) {
+        nodes.forEach(node => {
+            this.node.appendChild(node.node)
         })
     }
+
     /**
-     * Insert HTML as a child to the DOMElement
-     * @param {String} HTMLString 
+     * Add nodes to the parent Layout after creation
+     * @param  {...Node} nodes 
      */
-    insert(HTMLString, position = 'beforeend') {
-        this.obj.insertAdjacentHTML(position, HTMLString)
-    }
-
-    // Removes this DOMElement from all places in the DOM
-    remove() {
-        this.obj.remove()
-    }
-    // Removes all children from the DOMElement
-    clear() {
-        helpers.clear(this.obj)
-    }
-
-    // Creates a new DOMElement
-    clone() {
-        return new this.constructor()
+    add(...nodes) {
+        nodes.forEach(node => {
+            this.node.appendChild(node.node)
+        })
     }
 }
 
-/**
- * Just a textarea, nothing fancy
- */
-class DTextArea extends DOMElement {
-    /**
-     * Creates a textarea based on the parameters supplied
-     * @param {String} content 
-     * @param {Number} height optional
-     * @param {Number} width optional
-     */
-    constructor(content, height = 5, width = 20) {
-        super("textarea")
-        this.obj.rows = height
-        this.obj.cols = width
-        this.obj.value = content
-    }
-    /**
-     * Set the editing avalability of the textarea
-     * @param {Boolean} toggle 
-     */
-    setEditable(toggle) {
-        this.obj.disabled = !toggle;
-    }
-
-    /**
-     * Set the content of said textarea
-     * @param {String} text 
-     */
-    setValue(text) {
-        this.obj.value = text
-    }
-
-    /**
-     * Creates a copy of the caller DTextArea
-     */
-    clone() {
-        return new this.constructor(this.content, this.obj.rows, this.obj.value)
-    }
-}
-
-/**
- * Just a standard HTML button, no layout or anything.
- */
-class DButton extends DOMElement {
-    /**
-     * Creates a new button
-     * @param {String} content 
-     */
-    constructor(content) {
-        super("button")
-        this.content = content
-    }
-    /**
-     * Set the avalability of the button
-     * @param {Boolean} toggle 
-     */
-    setEnabled(toggle) {
-        this.obj.disabled = !toggle;
-    }
-    /**
-     * Creates a copy of the caller DButton
-     */
-    clone() {
-        return new this.constructor(this.content)
-    }
-}
-
-/**
- * Here's where it gets interesting - the Layout class
- * serves as the base for FlexLayout, GridLayout,
- * VerticalLayout, and HorizontalLayout. They are similar to
- * their CSS cousins, but not identical.
- */
-class Layout extends DOMElement {
-    constructor() {
-        super("div")
-    }
-}
-
-/**
- * If you are familiar with CSS Grid (or any other grid
- * libraries) this will be easy to understand. GridLayout
- * creates a new DOMElement acting as a grid of given
- * dimensions rows*columns.
- */
 class GridLayout extends Layout {
-    constructor(rows, cols) {
-        super()
+    constructor(rows, cols, ...nodes) {
+        super(nodes)
         this.addStyle(`display: grid; width: 100%`)
-        this.addStyle(`grid-template-rows: ${this.autoGen(rows)};`)
-        this.addStyle(`grid-template-columns: ${this.autoGen(cols)};`)
-    }
-
-    autoGen(number) {
-        return "auto ".repeat(number)
-    }
-}
-
-/**
- * Similar to the GridLayout above... this follows flexbox
- * instead of grid, this is a 'horizontal laytout'
- */
-class FlexLayout extends Layout {
-    constructor() {
-        super()
-        this.addStyle(`display: flex; width: 100%;`)
+        this.addStyle(`grid-template-rows: ${helpers.autoGen(rows)};`)
+        this.addStyle(`grid-template-columns: ${helpers.autoGen(cols)};`)
     }
 }
 
 
-class VerticalLayout extends FlexLayout {
-    constructor() {
-        super()
+class HorizontalLayout extends Layout {
+    constructor(...nodes) {
+        super(nodes)
+        this.addStyle(`display: flex; width: 100%`)
+    }
+}
+
+class VerticalLayout extends Layout {
+    constructor(...nodes) {
+        super(nodes)
+        this.addStyle(`display: flex; width: 100%`)
         this.addStyle(`flex-direction: column;`)
     }
 }
