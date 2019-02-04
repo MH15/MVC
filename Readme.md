@@ -10,6 +10,26 @@ look at glitch.com for hosting demos
 - Routing library can switch between multiple DOM elements
 
 
+## DOMElement Class Structure
+- Element
+  - DOMElement
+    - Control(tag) - elements for user interaction can be focused
+      - Button(text)
+      - Input(tag)
+        - TextInput(placeholder, type)
+        - TextArea(placeholder, content)
+      - Link(content, href)
+    - Layout(...nodes)
+      - GridLayout(rows, cols, ...nodes)
+      - HorizontalLayout(...nodes)
+        - VerticalLayout(...nodes)
+          - List(...nodes)
+  - HTMLElement - To be defined later
+
+## Routing
+- Switch between different classes
+
+
 ## Elements of good UI Engineering
 - Consistency: 
 - Responsiveness
@@ -27,18 +47,3 @@ look at glitch.com for hosting demos
 See [this](https://news.ycombinator.com/item?id=18792373) and [this](https://overreacted.io/the-elements-of-ui-engineering/)
 
 
-## DOMElement Class Structure
-- Element
-  - DOMElement
-    - Control(tag) - elements for user interaction can be focused
-      - Button(text)
-      - Input(tag)
-        - Text(placeholder, type)
-        - TextArea(placeholder, content)
-      - Link(content, href)
-    - Layout
-      - GridLayout(rows, cols, ...node)
-      - HorizontalLayout(...nodes)
-      - VerticalLayout(...nodes)
-  - HTMLElement
-    - 

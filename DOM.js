@@ -1,5 +1,5 @@
 
-class Rotor {
+class DOM {
     /**
      * Create the root of your app
      * @param {Node} rootNode 
@@ -83,13 +83,21 @@ class DOMElement extends Element {
 }
 
 class Control extends DOMElement {
-    constructor(tag) { super(tag) }
+    constructor(tag) {
+        super(tag)
+    }
 
     set enabled(mode) { this.node.disabled = !mode }
     get enabled() { return !this.node.disabled }
 
-    focus(preventScroll) { this.node.focus(preventScroll) }
-    blur() { this.node.blur() }
+    focus(preventScroll) {
+        this.node.focus(preventScroll)
+        return this
+    }
+    blur() {
+        this.node.blur()
+        return this // for chaining
+    }
 }
 
 class Button extends Control {
@@ -110,7 +118,7 @@ class Input extends Control {
     get placeholder() { return this.node.placeholder }
 }
 
-class Text extends Input {
+class TextInput extends Input {
     constructor(placeholder, type = 'text') {
         super('input')
         this.node.type = type
@@ -126,7 +134,6 @@ class TextArea extends Input {
     }
 }
 
-
 class Anchor extends Control {
     constructor(content = "DefaultAnchorText", href = "/") {
         super('a')
@@ -139,22 +146,11 @@ class Anchor extends Control {
 }
 
 class Layout extends DOMElement {
-    constructor(nodes) {
+    constructor(...nodes) {
         super('div')
-        if (nodes) {
-            this.addFirst(nodes)
-        }
+        this.add(...nodes)
     }
 
-    /**
-     * Add nodes to the parent Layout during creation
-     * @param  {Node[]} nodes 
-     */
-    addFirst(nodes) {
-        nodes.forEach(node => {
-            this.node.appendChild(node.node)
-        })
-    }
 
     /**
      * Add nodes to the parent Layout after creation
@@ -173,6 +169,15 @@ class Layout extends DOMElement {
             this.addStyle(`height: auto;`)
         }
     }
+
+    get children() {
+        return [...this.node.children]
+    }
+
+    hasChild(element) {
+        let children = this.children
+        return this.children.includes(element.node)
+    }
 }
 
 class GridLayout extends Layout {
@@ -187,18 +192,22 @@ class GridLayout extends Layout {
 
 class HorizontalLayout extends Layout {
     constructor(...nodes) {
-        super(nodes)
+        super(...nodes)
         this.addStyle(`display: flex; width: 100%`)
     }
 
 }
 
-class VerticalLayout extends Layout {
+class VerticalLayout extends HorizontalLayout {
     constructor(...nodes) {
-        super(nodes)
+        super(...nodes)
         this.addStyle(`display: flex; width: 100%`)
         this.addStyle(`flex-direction: column;`)
     }
+}
 
-
+class List extends VerticalLayout {
+    constructor(...nodes) {
+        super(...nodes)
+    }
 }
