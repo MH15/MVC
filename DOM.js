@@ -1,13 +1,13 @@
-
 class DOM {
     /**
      * Create the root of your app
      * @param {Node} rootNode 
      * @param {String} name 
      */
-    constructor(rootNode, name) {
+    constructor(controller, path) {
         this.title = name
-        this.node = rootNode
+        this.path = path
+        this.registerObserver(controller)
     }
     /**
      * Attach the Controller to the View
@@ -15,6 +15,7 @@ class DOM {
      */
     registerObserver(controller) {
         this.controller = controller;
+        this.controller.register(this)
     }
     // Manage the Document Title
     get title() { return document.title }
@@ -36,11 +37,16 @@ class Element {
      */
     constructor(node) {
         this.node = node
+        return this
     }
 
 
     set content(text) { this.node.innerHTML = text }
     get content() { return this.node.innerHTML }
+    setContent(text) {
+        this.node.innerHTML = text
+        return this
+    }
 
     /**
      * Add classes to a given DOM element
@@ -52,10 +58,12 @@ class Element {
         classNames.forEach(c => {
             this.node.classList.add(c)
         })
+        return this
     }
 
     flex(value = 1) {
         this.addStyle(`flex: ${value}`)
+        return this
     }
 
     /**
@@ -65,6 +73,21 @@ class Element {
      */
     addStyle(style) {
         this.node.style.cssText += style
+        return this
+    }
+
+    /**
+     * This is literally just a wrapper for addEventListener
+     * @param {String} type 
+     * @param {Function} callback 
+     */
+    registerEvent(type, callback, options) {
+        if (helpers.VALID_DOM_EVENTS.includes(type)) {
+            this.node.addEventListener(type, callback, options)
+        } else {
+            throw "That's an invalid event type."
+        }
+        return this
     }
 }
 
@@ -79,6 +102,7 @@ class DOMElement extends Element {
         } else {
             throw "Try a valid HTML tag next time."
         }
+        return this
     }
 }
 
@@ -139,6 +163,13 @@ class Anchor extends Control {
         super('a')
         this.content = content
         this.href = href
+
+        helpers.catchLink(this.node, this.handleAnchorClick)
+
+    }
+
+    handleAnchorClick(url) {
+        controller.route(url.pathname)
     }
 
     set href(href) { this.node.href = href }
@@ -160,14 +191,16 @@ class Layout extends DOMElement {
         nodes.forEach(node => {
             this.node.appendChild(node.node)
         })
+        return true
     }
 
-    set maximized(mode) {
+    set expanded(mode) {
         if (mode) {
             this.addStyle(`height: 100%;`)
         } else {
             this.addStyle(`height: auto;`)
         }
+        return true
     }
 
     get children() {
@@ -182,7 +215,7 @@ class Layout extends DOMElement {
 
 class GridLayout extends Layout {
     constructor(rows, cols, ...nodes) {
-        super(nodes)
+        super(...nodes)
         this.addStyle(`display: grid; width: 100%`)
         this.addStyle(`grid-template-rows: ${helpers.autoGen(rows)};`)
         this.addStyle(`grid-template-columns: ${helpers.autoGen(cols)};`)
@@ -193,7 +226,7 @@ class GridLayout extends Layout {
 class HorizontalLayout extends Layout {
     constructor(...nodes) {
         super(...nodes)
-        this.addStyle(`display: flex; width: 100%`)
+        this.addStyle(`display: flex; /*width: 100%*/`)
     }
 
 }

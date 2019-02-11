@@ -25,7 +25,39 @@ class DOM_Helpers {
         return document.body
     }
 
-    static autoGen(number) {
+    autoGen(number) {
         return "auto ".repeat(number)
+    }
+
+    /**
+     * Credit to:
+     * @href https://github.com/substack/catch-links/
+     * @param {Node} node 
+     * @param {Function} cb 
+     */
+    catchLink(node, cb) {
+        node.addEventListener('click', function (ev) {
+            if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.defaultPrevented) {
+                return true;
+            }
+
+            ev.preventDefault();
+            let anchor = null;
+            for (var n = ev.target; n.parentNode; n = n.parentNode) {
+                if (n.nodeName === 'A') {
+                    anchor = n;
+                    break;
+                }
+            }
+            if (!anchor) return true;
+
+
+            let url = new URL(anchor.getAttribute('href'), location.origin)
+
+            cb(url);
+            return false;
+
+
+        })
     }
 }

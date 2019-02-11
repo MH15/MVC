@@ -9,25 +9,42 @@
 <body>
 
 
+    <script type="text/javascript" src="model.js"></script>
     <script type="text/javascript" src="DOM_Helpers.js"></script>
     <script type="text/javascript" src="DOM.js"></script>
     <script type="text/javascript" src="Rotor.js"></script>
-    <script type="text/javascript" src="model.js"></script>
     <script type="text/javascript" src="view.js"></script>
     <script type="text/javascript" src="controller.js"></script>
 
     <script type="text/javascript">
         let helpers = new DOM_Helpers()
-        let model = new EventStore();
+        let model = new Model();
 
 
-        // Create multiple views..
-        let viewTodo = new ToDoView();
-        let viewSettings = new SettingsView();
 
-        // Then create your controller with the current view
-        let controller = new Controller(model, viewTodo)
-        controller.view = viewSettings
+        // Create your controller based on the Rotor library
+        let controller = new Controller(model)
+
+        // Create multiple views and attach a controller
+        let viewTodo = new ToDoView(controller)
+        // let viewSettings = new SettingsView(controller)
+
+        controller.currentView = viewTodo
+
+        // controller.route('/a')
+
+
+
+
+
+        setTimeout(() => {
+            // controller.view = viewSettings
+        }, 2000)
+
+
+        // setTimeout(() => {
+        //     controller.view = viewTodo
+        // }, 4000)
 
 
         // let controller = new Controller(model, viewTodo);

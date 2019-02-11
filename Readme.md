@@ -8,6 +8,7 @@ look at glitch.com for hosting demos
 - Complete the basic DOM manipulation library, including the elements
 - Create a way to add HTML code that may not fit into the DOMElement classes
 - Routing library can switch between multiple DOM elements
+- Event library
 
 
 ## DOMElement Class Structure
@@ -27,7 +28,10 @@ look at glitch.com for hosting demos
   - HTMLElement - To be defined later
 
 ## Routing
-- Switch between different classes
+- Rotor
+  - view = View - set the current view
+  - route(path) - change to view to one associated with the provided path, useful for links and anchors
+
 
 
 ## Elements of good UI Engineering
@@ -47,3 +51,8 @@ look at glitch.com for hosting demos
 See [this](https://news.ycombinator.com/item?id=18792373) and [this](https://overreacted.io/the-elements-of-ui-engineering/)
 
 
+
+
+### Credits
+- [catch-links](https://github.com/substack/catch-links/blob/master/index.js)
+- 

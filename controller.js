@@ -1,25 +1,27 @@
 class Controller extends Rotor {
-    constructor(model, currentView) {
-        super()
-        this.model = model
-        this.view = currentView
+    constructor(model) {
+        super(model)
         // this.updateViewToMatch(model, view)
 
-
     }
 
-    set view(View) {
-        helpers.clear(document.body)
-        console.log(View)
-        document.body.appendChild(View.root.node)
-        // document.body = View.node
-        // this.view = View
-    }
 
     updateViewToMatch() {
         // this.view.updateTopDisplay(this.model.top)
         // this.view.updateBottomDisplay(this.model.bottom)
     }
 
+    loadSettings() {
+        let view = this.RegisteredViews.find(view => {
+            return view.path === '/settings'
+        })
+        // console.log(this.controller)
+        this.currentView = view
+    }
+
+    updateLikes() {
+        this.model.likes++
+        this.view.updateLikes(this.model.likes)
+    }
 }
 
